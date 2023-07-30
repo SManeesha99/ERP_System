@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create User</title>
+    <title>ERP Syatem</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
     <div class="container my-5">
         <h2>List of Users</h2>
-        <a class="btn btn-primary" href="/erpsystem/create.php" role="button">New User</a>
+        <a class="btn btn-primary" href="/ERP_System/create.php" role="button">New User</a>
         <br>
         <table class="table">
             <thead>
@@ -56,8 +56,8 @@
                             <td>$row[contact_no]</td>
                             <td>$row[district]</td>
                             <td>
-                                <a class='btn btn-primary' href='/erpsystem/edit.php?id=$row[id]' role='button'>Edit</a>
-                                <a class='btn btn-danger' href='/erpsystem/delete.php?id=$row[id]' role='button'>Delete</a>
+                                <a class='btn btn-primary' href='/ERP_System/edit.php?id=$row[id]' role='button'>Edit</a>
+                                <a class='btn btn-danger' href='/ERP_System/delete.php?id=$row[id]' role='button'>Delete</a>
                             </td>
                         </tr>
                         ";
