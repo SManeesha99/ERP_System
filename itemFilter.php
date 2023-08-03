@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ERP Syatem</title>
+    <title>ERP System</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 </head>
@@ -33,6 +33,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <button type="submit" name="filter" class="btn btn-primary mt-4">Filter</button>
+                                    <a href="generate_report.php" target="_blank" class="btn btn-success mt-4">Generate Report</a>
                                 </div>    
                             </div>
                         </form>
@@ -49,15 +50,14 @@
                                     <th>Invoice number</th>
                                     <th>Date</th>
                                     <th>Customer</th>
-                                    <th> Customer district</th>
+                                    <th>Customer district</th>
                                     <th>Item count</th>
                                     <th>Invoice amount</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
-                                if(isset($_GET['from_date']) && isset($_GET['to_date']))
-                                {
+                                if (isset($_GET['from_date']) && isset($_GET['to_date'])) {
                                     $from_date = $_GET['from_date'];
                                     $to_date = $_GET['to_date'];
 
@@ -73,26 +73,27 @@
                                               FROM invoice
                                               INNER JOIN customer ON invoice.id = customer.id
                                               WHERE invoice.date BETWEEN '$from_date' AND '$to_date'";
-                                    $result = $connection->query($query);
+                                } else {
+                                    $query = "SELECT invoice.*, customer.first_name, customer.district
+                                              FROM invoice
+                                              INNER JOIN customer ON invoice.id = customer.id";
+                                }
 
-                                    if(mysqli_num_rows($result) > 0)
-                                    {
-                                        while($row = mysqli_fetch_assoc($result))
-                                        {
-                                            echo "<tr>";
-                                            echo "<td>".$row['invoice_no']."</td>";
-                                            echo "<td>".$row['date']."</td>";
-                                            echo "<td>".$row['first_name']."</td>";
-                                            echo "<td>".$row['district']."</td>";
-                                            echo "<td>".$row['item_count']."</td>";
-                                            echo "<td>".$row['amount']."</td>";
-                                            echo "</tr>";
-                                        }
+                                $result = $connection->query($query);
+
+                                if (mysqli_num_rows($result) > 0) {
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                        echo "<tr>";
+                                        echo "<td>".$row['invoice_no']."</td>";
+                                        echo "<td>".$row['date']."</td>";
+                                        echo "<td>".$row['first_name']."</td>";
+                                        echo "<td>".$row['district']."</td>";
+                                        echo "<td>".$row['item_count']."</td>";
+                                        echo "<td>".$row['amount']."</td>";
+                                        echo "</tr>";
                                     }
-                                    else
-                                    {
-                                        echo "<tr><td colspan='6' class='text-center'>No data found</td></tr>";
-                                    }
+                                } else {
+                                    echo "<tr><td colspan='6' class='text-center'>No data found</td></tr>";
                                 }
                                 ?>
                             </tbody>
