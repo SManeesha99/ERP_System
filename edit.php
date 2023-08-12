@@ -86,6 +86,36 @@ $connection = new mysqli($servername, $username, $password, $dbname);
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">ERP-SYSTEM</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="index.php">Customers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="item.php">Items</a>
+                    </li>
+                    <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Reports
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <li><a class="dropdown-item" href="itemFilter.php">Invoice report</a></li>
+            <li><a class="dropdown-item" href="invoiceitemreport.php">Invoice item report</a></li>
+            <li><a class="dropdown-item" href="itemreport.php">Item report</a></li>
+          </ul>
+        </li>
+                </ul>
+                
+            </div>
+        </div>
+    </nav>
     <div class="container my-5">
         <h2>Create Customer</h2>
         <?php
@@ -125,10 +155,30 @@ $connection = new mysqli($servername, $username, $password, $dbname);
                 </div>
             </div>
             <div class="row mb-3">
-                <label class="col-sm-3 col-form-label" >District</label>
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">District</label>
                 <div class="col-sm-6">
-                    <input type="text" class="form-control" name="district" value="<?php echo $district; ?>">
+                    <select class="form-control" name="district">
+                        <option value="<?php echo $district; ?>"><?php echo $district; ?></option>
+                        <?php
+                        // Assuming you have a database connection named $conn
+                        $query = "SELECT * FROM district";
+                        $result = mysqli_query($connection, $query);
+
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            $districtName = $row['district'];
+                            $districtID = $row['id'];
+
+                            // Check if the currently selected district matches the fetched district
+                            $selected = ($district == $districtID) ? 'selected' : '';
+
+                            echo "<option value='$districtID' $selected>$districtID</option>";
+                        }
+                        ?>
+                    </select>
                 </div>
+            </div>
+
             </div>
 
             <?php

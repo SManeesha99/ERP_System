@@ -63,7 +63,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <button type="submit" name="filter" class="btn btn-primary mt-4">Filter</button>
-                                    <a href="generate_report_Invoice.php" target="_blank" class="btn btn-success mt-4">Generate Report</a>
+                                    <a href="generate_report_item.php" target="_blank" class="btn btn-success mt-4">Generate Report</a>
                                 </div>    
                             </div>
                         </form>
@@ -72,17 +72,18 @@
 
                 <div class="card mt-3">
                     <div class="card-body">
-                        <h3>Invoice Report</h3>
+                        <h3>Item Invoice List</h3>
                         <hr>
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Invoice number</th>
-                                    <th>Date</th>
-                                    <th>Customer</th>
-                                    <th>Customer district</th>
-                                    <th>Item count</th>
-                                    <th>Invoice amount</th>
+                                <th>Invoice Number</th>
+                                <th>Invoiced Date</th>
+                                <th>Customer Name</th>
+                                <th>Item Name</th>
+                                <th>Item Code</th>
+                                <th>Item Category</th>
+                                <th>Item Unit Price</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -99,16 +100,14 @@
                                     // Create connection
                                     $connection = new mysqli($servername, $username, $password, $dbname);
 
-                                    $query = "SELECT invoice.invoice_no, invoice.date, CONCAT(customer.title, ' ', customer.first_name, ' ', customer.last_name) AS customer_name, district.district, invoice.item_count, invoice.amount
+                                    $query = "SELECT invoice.invoice_no, invoice.date, CONCAT(customer.title, ' ', customer.first_name, ' ', customer.last_name) AS customer_name,
+                                    item.item_name, item.item_code, item_category.category AS item_category, item.unit_price
                                     FROM invoice
                                     JOIN customer ON invoice.customer = customer.id
-                                    JOIN district ON customer.district = district.id
+                                    JOIN item ON invoice.item_count = item.id
+                                    JOIN item_category ON item.item_category = item_category.id
                                     WHERE invoice.date BETWEEN '$from_date' AND '$to_date'";
-                                } else {
-                                    $query = "SELECT invoice.*, customer.first_name, customer.district
-                                              FROM invoice
-                                              INNER JOIN customer ON invoice.id = customer.id";
-                                }
+                                } 
 
                                 $result = $connection->query($query);
 
@@ -118,13 +117,14 @@
                                         echo "<td>".$row['invoice_no']."</td>";
                                         echo "<td>".$row['date']."</td>";
                                         echo "<td>".$row['customer_name']."</td>";
-                                        echo "<td>".$row['district']."</td>";
-                                        echo "<td>".$row['item_count']."</td>";
-                                        echo "<td>".$row['amount']."</td>";
+                                        echo "<td>".$row['item_name']."</td>";
+                                        echo "<td>".$row['item_code']."</td>";
+                                        echo "<td>".$row['item_category']."</td>";
+                                        echo "<td>".$row['unit_price']."</td>";
                                         echo "</tr>";
                                     }
                                 } else {
-                                    echo "<tr><td colspan='6' class='text-center'>No data found</td></tr>";
+                                    echo "<tr><td colspan='7' class='text-center'>No data found</td></tr>";
                                 }
                                 ?>
                             </tbody>

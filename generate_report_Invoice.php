@@ -7,9 +7,10 @@ $dbname = "erpsystem";
 // Create connection
 $connection = new mysqli($servername, $username, $password, $dbname);
 
-$query = "SELECT invoice.*, customer.first_name, customer.district
+$query = "SELECT invoice.invoice_no, invoice.date, CONCAT(customer.title, ' ', customer.first_name, ' ', customer.last_name) AS customer_name, district.district, invoice.item_count, invoice.amount
           FROM invoice
-          INNER JOIN customer ON invoice.id = customer.id";
+          JOIN customer ON invoice.customer = customer.id
+          JOIN district ON customer.district = district.id";
 
 $result = $connection->query($query);
 
@@ -19,7 +20,7 @@ $fp = fopen($filename, "w");
 
 if ($result->num_rows > 0) {
     // Write CSV headers
-    $headers = array("Invoice Number", "Date", "Customer", "Customer District", "Item Count", "Invoice Amount");
+    $headers = array("Invoice Number", "Date", "Customer Name", "Customer District", "Item Count", "Invoice Amount");
     fputcsv($fp, $headers);
 
     // Write data to CSV
@@ -27,7 +28,7 @@ if ($result->num_rows > 0) {
         $data = array(
             $row['invoice_no'],
             $row['date'],
-            $row['first_name'],
+            $row['customer_name'],
             $row['district'],
             $row['item_count'],
             $row['amount']
